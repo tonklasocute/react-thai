@@ -44,6 +44,20 @@ jobs:
           echo '### Bundle sizes (gzip)' >> "$GITHUB_STEP_SUMMARY"
           pnpm -s size-limit --json | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{for(const r of JSON.parse(s))console.log(`- ${r.name}: ${(r.size/1024).toFixed(2)} kB`)})' >> "$GITHUB_STEP_SUMMARY"
 
+  react-18:
+    name: Tests on React 18
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm add -D react@^18.3.1 react-dom@^18.3.1 @types/react@^18.3.0 @types/react-dom@^18.3.0
+      - run: pnpm test
+
   storybook:
     name: Storybook interaction + a11y tests
     runs-on: ubuntu-latest
