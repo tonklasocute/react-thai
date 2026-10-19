@@ -11,3 +11,4 @@ examples/**/.next
 examples/**/dist
 examples/**/next-env.d.ts
 .cache
+examples/**/package-lock.json

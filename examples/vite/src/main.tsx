@@ -13,7 +13,15 @@ function App() {
   const [address, setAddress] = useState<ThaiAddress | null>(null);
   const [id, setId] = useState('');
   return (
-    <main style={{ maxWidth: 560, margin: '2rem auto', display: 'grid', gap: 16, fontFamily: 'system-ui' }}>
+    <main
+      style={{
+        maxWidth: 560,
+        margin: '2rem auto',
+        display: 'grid',
+        gap: 16,
+        fontFamily: 'system-ui',
+      }}
+    >
       <h1>react-thai + Vite (React 18)</h1>
       <ThaiDatePicker label="วันเกิด" value={date} onChange={setDate} name="birthday" />
       <ThaiAddressInput label="ที่อยู่" value={address} onChange={setAddress} />

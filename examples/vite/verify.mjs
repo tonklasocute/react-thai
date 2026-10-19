@@ -5,7 +5,9 @@ import { gzipSync } from 'node:zlib';
 const dir = new URL('./dist/assets/', import.meta.url);
 const files = readdirSync(dir).filter((f) => f.endsWith('.js'));
 const read = (f) => readFileSync(new URL(f, dir), 'utf8');
-const entry = readFileSync(new URL('./dist/index.html', import.meta.url), 'utf8').match(/assets\/(index-[^"]+\.js)/)[1];
+const entry = readFileSync(new URL('./dist/index.html', import.meta.url), 'utf8').match(
+  /assets\/(index-[^"]+\.js)/,
+)[1];
 const dataChunks = files.filter((f) => read(f).includes('พระบรมมหาราชวัง'));
 
 const fail = (msg) => {

@@ -22,9 +22,13 @@ interface Frame {
   delay: number;
 }
 
-const server = spawn('pnpm', ['exec', 'http-server', 'storybook-static', '-p', String(PORT), '-s'], {
-  stdio: 'ignore',
-});
+const server = spawn(
+  'pnpm',
+  ['exec', 'http-server', 'storybook-static', '-p', String(PORT), '-s'],
+  {
+    stdio: 'ignore',
+  },
+);
 
 async function waitForServer() {
   for (let i = 0; i < 60; i++) {
@@ -98,13 +102,19 @@ async function main() {
   await page.waitForTimeout(300);
   const address = await record(page, [
     [async () => {}, 700],
-    ...[...'บางรัก'].map((ch): [() => Promise<unknown>, number] => [() => combo.pressSequentially(ch), 220]),
+    ...[...'บางรัก'].map((ch): [() => Promise<unknown>, number] => [
+      () => combo.pressSequentially(ch),
+      220,
+    ]),
     [async () => {}, 1200],
     [() => page.keyboard.press('ArrowDown'), 500],
     [() => page.keyboard.press('ArrowDown'), 500],
     [() => page.keyboard.press('Enter'), 1200],
     [() => combo.fill(''), 300],
-    ...[...'50200'].map((ch): [() => Promise<unknown>, number] => [() => combo.pressSequentially(ch), 200]),
+    ...[...'50200'].map((ch): [() => Promise<unknown>, number] => [
+      () => combo.pressSequentially(ch),
+      200,
+    ]),
     [async () => {}, 1400],
     [() => page.keyboard.press('ArrowDown'), 500],
     [() => page.keyboard.press('Enter'), 2000],
