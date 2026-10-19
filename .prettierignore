@@ -1,0 +1,10 @@
+dist
+coverage
+storybook-static
+pnpm-lock.yaml
+src/address/data/*.ts
+examples/**/node_modules
+examples/**/.next
+examples/**/dist
+.changeset/*.md
+CHANGELOG.md

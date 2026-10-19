@@ -1,0 +1,10 @@
+body {
+  font-family:
+    'Sarabun', 'Noto Sans Thai', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+.sb-surface {
+  padding: 1rem;
+  min-height: 420px;
+  background: var(--rt-bg);
+  color: var(--rt-fg);
+}

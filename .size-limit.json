@@ -1,0 +1,55 @@
+[
+  {
+    "name": "ThaiDatePicker (react-thai/date-picker, incl. @floating-ui)",
+    "path": "dist/date-picker.js",
+    "import": "{ ThaiDatePicker }",
+    "limit": "12 kB"
+  },
+  {
+    "name": "ThaiDatePicker + ThaiDateRangePicker + useThaiCalendar",
+    "path": "dist/date-picker.js",
+    "import": "*",
+    "limit": "12 kB"
+  },
+  {
+    "name": "ThaiAddressInput (code only, data is lazy)",
+    "path": "dist/address.js",
+    "import": "{ ThaiAddressInput }",
+    "ignore": ["./address-data-th.js", "./address-data-en.js"],
+    "limit": "6 kB"
+  },
+  {
+    "name": "ThaiIdInput",
+    "path": "dist/thai-id.js",
+    "import": "{ ThaiIdInput }",
+    "limit": "3 kB"
+  },
+  {
+    "name": "ThaiPhoneInput",
+    "path": "dist/phone.js",
+    "import": "{ ThaiPhoneInput }",
+    "limit": "3 kB"
+  },
+  {
+    "name": "BahtText",
+    "path": "dist/baht-text.js",
+    "import": "{ BahtText }",
+    "limit": "3 kB"
+  },
+  {
+    "name": "validators (all)",
+    "path": "dist/validators.js",
+    "import": "*",
+    "limit": "2 kB"
+  },
+  {
+    "name": "Address data: Thai (lazy chunk)",
+    "path": "dist/address-data-th.js",
+    "limit": "70 kB"
+  },
+  {
+    "name": "Address data: English names (lazy chunk)",
+    "path": "dist/address-data-en.js",
+    "limit": "50 kB"
+  }
+]
