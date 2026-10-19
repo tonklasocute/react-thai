@@ -1,0 +1,452 @@
+/*
+ * react-thai default theme.
+ * Everything lives in the `react-thai` cascade layer, so any unlayered rule you write
+ * (plain CSS, CSS modules, Tailwind utilities) wins without !important.
+ * Customise by overriding the --rt-* variables.
+ */
+@layer react-thai {
+  :root,
+  [data-theme='light'] {
+    --rt-font: inherit;
+    --rt-font-size: 1rem;
+    --rt-bg: #ffffff;
+    --rt-surface: #ffffff;
+    --rt-fg: #1c1917;
+    --rt-muted: #57534e;
+    --rt-border: #a8a29e;
+    --rt-border-strong: #57534e;
+    --rt-hover: #f5f5f4;
+    --rt-accent: #0f766e;
+    --rt-accent-fg: #ffffff;
+    --rt-accent-soft: #ccfbf1;
+    --rt-accent-soft-fg: #134e4a;
+    --rt-danger: #b91c1c;
+    --rt-focus: #0f766e;
+    --rt-mark-bg: #fef08a;
+    --rt-mark-fg: inherit;
+    --rt-radius: 0.5rem;
+    --rt-radius-sm: 0.375rem;
+    --rt-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.25), 0 2px 6px rgb(0 0 0 / 0.08);
+    --rt-control-height: 2.5rem;
+    --rt-day-size: 2.5rem;
+    --rt-z: 50;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      --rt-bg: #1c1917;
+      --rt-surface: #292524;
+      --rt-fg: #f5f5f4;
+      --rt-muted: #a8a29e;
+      --rt-border: #78716c;
+      --rt-border-strong: #d6d3d1;
+      --rt-hover: #3a3532;
+      --rt-accent: #5eead4;
+      --rt-accent-fg: #042f2e;
+      --rt-accent-soft: #134e4a;
+      --rt-accent-soft-fg: #ccfbf1;
+      --rt-danger: #fca5a5;
+      --rt-focus: #5eead4;
+      --rt-mark-bg: #854d0e;
+      --rt-mark-fg: #fefce8;
+      --rt-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.7);
+    }
+  }
+
+  [data-theme='dark'] {
+    --rt-bg: #1c1917;
+    --rt-surface: #292524;
+    --rt-fg: #f5f5f4;
+    --rt-muted: #a8a29e;
+    --rt-border: #78716c;
+    --rt-border-strong: #d6d3d1;
+    --rt-hover: #3a3532;
+    --rt-accent: #5eead4;
+    --rt-accent-fg: #042f2e;
+    --rt-accent-soft: #134e4a;
+    --rt-accent-soft-fg: #ccfbf1;
+    --rt-danger: #fca5a5;
+    --rt-focus: #5eead4;
+    --rt-mark-bg: #854d0e;
+    --rt-mark-fg: #fefce8;
+    --rt-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.7);
+  }
+
+  .rt-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ---------- Field ---------- */
+  .rt-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    font-family: var(--rt-font);
+    font-size: var(--rt-font-size);
+    color: var(--rt-fg);
+  }
+  .rt-label {
+    font-weight: 600;
+    font-size: 0.9375em;
+  }
+  .rt-hint {
+    margin: 0;
+    font-size: 0.875em;
+    color: var(--rt-muted);
+  }
+  .rt-error {
+    margin: 0;
+    font-size: 0.875em;
+    color: var(--rt-danger);
+  }
+  .rt-error[hidden] {
+    display: none;
+  }
+
+  .rt-input {
+    box-sizing: border-box;
+    min-height: var(--rt-control-height);
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font: inherit;
+    color: var(--rt-fg);
+    background: var(--rt-surface);
+    border: 1px solid var(--rt-border);
+    border-radius: var(--rt-radius);
+    outline: none;
+    transition:
+      border-color 120ms,
+      box-shadow 120ms;
+  }
+  .rt-input::placeholder {
+    color: var(--rt-muted);
+  }
+  .rt-input:hover:not(:disabled) {
+    border-color: var(--rt-border-strong);
+  }
+  .rt-input:focus-visible {
+    border-color: var(--rt-focus);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--rt-focus) 35%, transparent);
+  }
+  .rt-input[aria-invalid='true'] {
+    border-color: var(--rt-danger);
+  }
+  .rt-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* ---------- Date picker ---------- */
+  .rt-dp__anchor {
+    position: relative;
+  }
+  .rt-dp__control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .rt-dp__input {
+    padding-right: 2.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .rt-dp--range .rt-dp__input {
+    padding-right: 0.75rem;
+  }
+  .rt-dp--range .rt-dp__control {
+    padding-right: 2.75rem;
+  }
+  .rt-dp__trigger {
+    position: absolute;
+    right: 0.25rem;
+    display: inline-grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    color: var(--rt-muted);
+    background: transparent;
+    border: 0;
+    border-radius: var(--rt-radius-sm);
+    cursor: pointer;
+  }
+  .rt-dp__trigger:hover:not(:disabled) {
+    color: var(--rt-fg);
+    background: var(--rt-hover);
+  }
+  .rt-dp__trigger:focus-visible,
+  .rt-cal__nav:focus-visible,
+  .rt-cal__today:focus-visible,
+  .rt-cal__select:focus-visible,
+  .rt-cal__day:focus-visible {
+    outline: 2px solid var(--rt-focus);
+    outline-offset: 2px;
+  }
+  .rt-dp__trigger:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  .rt-dp__popover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--rt-z);
+    width: max-content;
+    padding: 0.75rem;
+    color: var(--rt-fg);
+    background: var(--rt-surface);
+    border: 1px solid var(--rt-border);
+    border-radius: calc(var(--rt-radius) + 0.25rem);
+    box-shadow: var(--rt-shadow);
+  }
+
+  /* ---------- Calendar ---------- */
+  .rt-cal {
+    font-family: var(--rt-font);
+    color: var(--rt-fg);
+  }
+  .rt-cal__header {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-bottom: 0.5rem;
+  }
+  .rt-cal__nav {
+    display: inline-grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    color: var(--rt-fg);
+    background: transparent;
+    border: 1px solid var(--rt-border);
+    border-radius: var(--rt-radius-sm);
+    cursor: pointer;
+  }
+  .rt-cal__nav:hover:not(:disabled) {
+    background: var(--rt-hover);
+  }
+  .rt-cal__nav:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .rt-cal__header > .rt-cal__nav:last-child {
+    margin-left: auto;
+  }
+  .rt-cal__select {
+    height: 2rem;
+    padding: 0 0.5rem;
+    font: inherit;
+    font-size: 0.9375em;
+    font-weight: 600;
+    color: var(--rt-fg);
+    background: var(--rt-surface);
+    border: 1px solid var(--rt-border);
+    border-radius: var(--rt-radius-sm);
+    cursor: pointer;
+  }
+  .rt-cal__months {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+  .rt-cal__month-label {
+    margin: 0.25rem 0 0.375rem;
+    font-weight: 600;
+    text-align: center;
+  }
+  .rt-cal__grid {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  .rt-cal__weekday {
+    width: var(--rt-day-size);
+    height: 2rem;
+    font-size: 0.8125em;
+    font-weight: 500;
+    color: var(--rt-muted);
+    text-align: center;
+  }
+  .rt-cal__cell {
+    padding: 1px 0;
+    text-align: center;
+  }
+  .rt-cal__cell[data-in-range] {
+    background: var(--rt-accent-soft);
+  }
+  .rt-cal__cell[data-range-start] {
+    border-radius: 999px 0 0 999px;
+  }
+  .rt-cal__cell[data-range-end] {
+    border-radius: 0 999px 999px 0;
+  }
+  .rt-cal__cell[data-range-start][data-range-end] {
+    border-radius: 999px;
+  }
+  .rt-cal__day {
+    position: relative;
+    width: var(--rt-day-size);
+    height: var(--rt-day-size);
+    padding: 0;
+    font: inherit;
+    font-size: 0.9375em;
+    font-variant-numeric: tabular-nums;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .rt-cal__cell[data-in-range] .rt-cal__day {
+    color: var(--rt-accent-soft-fg);
+  }
+  .rt-cal__day:hover:not([data-disabled]):not([data-selected]) {
+    background: var(--rt-hover);
+  }
+  .rt-cal__cell[data-in-range] .rt-cal__day:hover:not([data-selected]) {
+    background: color-mix(in srgb, var(--rt-accent) 20%, transparent);
+  }
+  .rt-cal__day[data-today]::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0.3rem;
+    width: 0.3rem;
+    height: 0.3rem;
+    margin-left: -0.15rem;
+    border-radius: 999px;
+    background: currentColor;
+  }
+  .rt-cal__day[data-selected] {
+    color: var(--rt-accent-fg);
+    background: var(--rt-accent);
+    font-weight: 600;
+  }
+  .rt-cal__day[data-disabled] {
+    opacity: 0.35;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+  .rt-cal__footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--rt-border);
+  }
+  .rt-cal__today {
+    padding: 0.25rem 0.75rem;
+    font: inherit;
+    font-size: 0.875em;
+    font-weight: 600;
+    color: var(--rt-accent);
+    background: transparent;
+    border: 0;
+    border-radius: var(--rt-radius-sm);
+    cursor: pointer;
+  }
+  .rt-cal__today:hover:not(:disabled) {
+    background: var(--rt-hover);
+  }
+  .rt-cal__today:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* ---------- Address ---------- */
+  .rt-addr {
+    gap: 0.75rem;
+  }
+  .rt-addr__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 0.75rem;
+  }
+  .rt-addr__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+  .rt-addr__combo {
+    position: relative;
+  }
+  .rt-addr__listbox {
+    position: absolute;
+    z-index: var(--rt-z);
+    top: calc(100% + 0.25rem);
+    left: 0;
+    right: 0;
+    min-width: min(24rem, 90vw);
+    max-height: 18rem;
+    margin: 0;
+    padding: 0.25rem;
+    overflow-y: auto;
+    list-style: none;
+    background: var(--rt-surface);
+    border: 1px solid var(--rt-border);
+    border-radius: var(--rt-radius);
+    box-shadow: var(--rt-shadow);
+  }
+  .rt-addr__option {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.5rem;
+    padding: 0.5rem 0.625rem;
+    border-radius: var(--rt-radius-sm);
+    cursor: pointer;
+  }
+  .rt-addr__option[aria-selected='true'] {
+    color: var(--rt-accent-soft-fg);
+    background: var(--rt-accent-soft);
+  }
+  .rt-addr__option-main {
+    font-weight: 600;
+  }
+  .rt-addr__option-sub {
+    font-size: 0.875em;
+    color: var(--rt-muted);
+  }
+  .rt-addr__option[aria-selected='true'] .rt-addr__option-sub {
+    color: inherit;
+  }
+  .rt-addr__postcode {
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+  .rt-addr__mark {
+    padding: 0;
+    color: var(--rt-mark-fg);
+    background: var(--rt-mark-bg);
+    border-radius: 2px;
+  }
+  .rt-addr__empty {
+    padding: 0.5rem 0.625rem;
+    color: var(--rt-muted);
+  }
+
+  /* ---------- Small inputs ---------- */
+  .rt-id__input,
+  .rt-phone__input {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+  .rt-baht {
+    font-family: var(--rt-font);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rt-input {
+      transition: none;
+    }
+  }
+}
