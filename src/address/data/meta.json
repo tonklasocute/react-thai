@@ -1,0 +1,23 @@
+{
+  "source": "https://github.com/kongvut/thai-province-data",
+  "license": "MIT",
+  "ref": "v3.1.0",
+  "commit": "7d689e478a577a1c9348f2b998c39dd4c2bf153d",
+  "generatedAt": "2026-10-19",
+  "counts": {
+    "provinces": 77,
+    "districts": 930,
+    "subdistricts": 7436,
+    "postcodes": 966
+  },
+  "bytes": {
+    "th": {
+      "raw": 252741,
+      "gzip": 58277
+    },
+    "en": {
+      "raw": 103291,
+      "gzip": 32012
+    }
+  }
+}

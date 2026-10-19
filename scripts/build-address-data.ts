@@ -1,0 +1,166 @@
+/**
+ * Builds the compact, lazy-loaded Thai address dataset used by `react-thai/address`.
+ *
+ * Source: kongvut/thai-province-data (MIT) – https://github.com/kongvut/thai-province-data
+ *
+ *   pnpm data:build                 # download the pinned release from GitHub
+ *   pnpm data:build --from ./dir    # use local province.json / district.json / sub_district.json
+ *   pnpm data:build --ref v3.2.0    # build from another tag (update SOURCE_REF afterwards)
+ *
+ * Output (committed, so builds are reproducible offline):
+ *   src/address/data/th.ts    Thai names + postcodes  (loaded on first use)
+ *   src/address/data/en.ts    English names           (loaded only with `includeEnglish`)
+ *   src/address/data/meta.json
+ */
+import { readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import { gzipSync } from 'node:zlib';
+
+const SOURCE_REPO = 'kongvut/thai-province-data';
+const SOURCE_REF = 'v3.1.0';
+const OUT_DIR = join(import.meta.dirname, '../src/address/data');
+const BANGKOK = 'กรุงเทพมหานคร';
+
+interface Named {
+  id: number;
+  name: { th: string; en: string };
+  prefix: { th: string; en: string } | null;
+  deleted_at: string | null;
+}
+type Province = Named;
+interface District extends Named {
+  province_id: number;
+}
+interface SubDistrict extends Named {
+  district_id: number;
+  zip_code: number;
+}
+
+const args = process.argv.slice(2);
+const argValue = (flag: string) => {
+  const i = args.indexOf(flag);
+  return i >= 0 ? args[i + 1] : undefined;
+};
+const ref = argValue('--ref') ?? SOURCE_REF;
+const fromDir = argValue('--from');
+
+async function load<T>(file: string): Promise<T[]> {
+  if (fromDir) return JSON.parse(await readFile(join(fromDir, file), 'utf8')) as T[];
+  const url = `https://raw.githubusercontent.com/${SOURCE_REPO}/${ref}/api/latest/${file}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`GET ${url} → ${res.status}`);
+  return (await res.json()) as T[];
+}
+
+async function resolveCommit(): Promise<string | null> {
+  if (fromDir) return null;
+  try {
+    const res = await fetch(`https://api.github.com/repos/${SOURCE_REPO}/commits/${ref}`, {
+      headers: { accept: 'application/vnd.github.sha' },
+    });
+    return res.ok ? (await res.text()).trim() : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Trim and collapse whitespace, NFC-normalise Thai. */
+const clean = (s: string) => s.normalize('NFC').replace(/\s+/g, ' ').trim();
+
+function assert(condition: unknown, message: string): asserts condition {
+  if (!condition) throw new Error(`Dataset check failed: ${message}`);
+}
+
+const live = <T extends Named>(rows: T[]) => rows.filter((r) => !r.deleted_at);
+
+const [provinces, districts, subdistricts, commit] = await Promise.all([
+  load<Province>('province.json').then(live),
+  load<District>('district.json').then(live),
+  load<SubDistrict>('sub_district.json').then(live),
+  resolveCommit(),
+]);
+
+// --- Validate ---------------------------------------------------------------
+const provinceIndex = new Map(provinces.map((p, i) => [p.id, i]));
+const districtIndex = new Map(districts.map((d, i) => [d.id, i]));
+const bangkokId = provinces.find((p) => clean(p.name.th) === BANGKOK)?.id;
+assert(bangkokId !== undefined, 'Bangkok not found');
+assert(provinces.length === 77, `expected 77 provinces, got ${provinces.length}`);
+for (const d of districts) {
+  assert(provinceIndex.has(d.province_id), `district ${d.id} has unknown province`);
+  const expected = d.province_id === bangkokId ? 'เขต' : 'อำเภอ';
+  assert(!d.prefix || d.prefix.th === expected, `district ${d.id} prefix ${d.prefix?.th}`);
+}
+for (const s of subdistricts) {
+  assert(districtIndex.has(s.district_id), `subdistrict ${s.id} has unknown district`);
+  assert(
+    /^\d{5}$/.test(String(s.zip_code)),
+    `subdistrict ${s.id} has invalid postcode ${s.zip_code}`,
+  );
+  assert(clean(s.name.th) && clean(s.name.en), `subdistrict ${s.id} has an empty name`);
+}
+
+// --- Transform --------------------------------------------------------------
+// Rows are sorted by postcode so the postcode index is a run-length list: [code, count, ...].
+const sorted = [...subdistricts].sort(
+  (a, b) => a.zip_code - b.zip_code || a.district_id - b.district_id || a.id - b.id,
+);
+const postcodes: number[] = [];
+for (const s of sorted) {
+  if (postcodes[postcodes.length - 2] === s.zip_code) postcodes[postcodes.length - 1]! += 1;
+  else postcodes.push(s.zip_code, 1);
+}
+
+const th = {
+  v: ref,
+  p: provinces.map((p) => clean(p.name.th)),
+  d: districts.flatMap((d) => [clean(d.name.th), provinceIndex.get(d.province_id)!]),
+  s: sorted.flatMap((s) => [clean(s.name.th), districtIndex.get(s.district_id)!]),
+  z: postcodes,
+};
+const en = {
+  v: ref,
+  p: provinces.map((p) => clean(p.name.en)),
+  d: districts.map((d) => clean(d.name.en)),
+  s: sorted.map((s) => clean(s.name.en)),
+};
+
+const header = (what: string) =>
+  `// Generated by scripts/build-address-data.ts – do not edit.\n` +
+  `// ${what} from ${SOURCE_REPO}@${ref} (MIT, © Kongvut Sangkla).\n`;
+
+const module = (type: string, data: unknown, what: string) =>
+  `${header(what)}import type { ${type} } from '../types';\n\n` +
+  `// JSON.parse of a string literal is faster to parse than an object literal of this size.\n` +
+  `export const data: ${type} = JSON.parse(${JSON.stringify(JSON.stringify(data))});\n`;
+
+const thSource = module('CompactThaiData', th, 'Thai names and postcodes');
+const enSource = module('CompactEnglishData', en, 'English names');
+await writeFile(join(OUT_DIR, 'th.ts'), thSource);
+await writeFile(join(OUT_DIR, 'en.ts'), enSource);
+
+const gz = (s: string) => gzipSync(s, { level: 9 }).length;
+const meta = {
+  source: `https://github.com/${SOURCE_REPO}`,
+  license: 'MIT',
+  ref,
+  commit,
+  generatedAt: new Date().toISOString().slice(0, 10),
+  counts: {
+    provinces: provinces.length,
+    districts: districts.length,
+    subdistricts: subdistricts.length,
+    postcodes: postcodes.length / 2,
+  },
+  bytes: {
+    th: { raw: Buffer.byteLength(JSON.stringify(th)), gzip: gz(JSON.stringify(th)) },
+    en: { raw: Buffer.byteLength(JSON.stringify(en)), gzip: gz(JSON.stringify(en)) },
+  },
+};
+await writeFile(join(OUT_DIR, 'meta.json'), `${JSON.stringify(meta, null, 2)}\n`);
+
+const kb = (n: number) => `${(n / 1024).toFixed(1)} kB`;
+console.log(`Built ${SOURCE_REPO}@${ref}${commit ? ` (${commit.slice(0, 7)})` : ''}`);
+console.log(meta.counts);
+console.log(`th: ${kb(meta.bytes.th.raw)} raw, ${kb(meta.bytes.th.gzip)} gzip`);
+console.log(`en: ${kb(meta.bytes.en.raw)} raw, ${kb(meta.bytes.en.gzip)} gzip`);
