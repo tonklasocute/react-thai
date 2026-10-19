@@ -1,0 +1,51 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Guides/Next.js App Router" />
+
+# Next.js (App Router)
+
+Interactive entry points (`react-thai`, `/date-picker`, `/address`, `/thai-id`, `/phone`) are
+published with a `"use client"` directive, so you can render them directly from a Server Component
+page — Next.js creates the client boundary for you.
+
+```tsx
+// app/register/page.tsx  (Server Component)
+import { ThaiDatePicker } from 'react-thai/date-picker';
+import 'react-thai/styles.css';
+
+export default function Page() {
+  return (
+    <form action="/api/register">
+      {/* Native form: a hidden input submits birthday=YYYY-MM-DD (CE) */}
+      <ThaiDatePicker label="วันเกิด" name="birthday" />
+      <button type="submit">ส่ง</button>
+    </form>
+  );
+}
+```
+
+Pass only serialisable props across the boundary. Callbacks such as `onChange` or
+`isDateDisabled` need a component of your own marked `"use client"`:
+
+```tsx
+'use client';
+import { ThaiAddressInput, type ThaiAddress } from 'react-thai/address';
+import { useState } from 'react';
+
+export function AddressField() {
+  const [address, setAddress] = useState<ThaiAddress | null>(null);
+  return <ThaiAddressInput label="ที่อยู่" value={address} onChange={setAddress} />;
+}
+```
+
+Server-safe entry points have **no** `"use client"` and can run in Server Components, Route
+Handlers and Server Actions:
+
+```ts
+import { isValidThaiId, toE164 } from 'react-thai/validators';
+import { thaiIdSchema } from 'react-thai/zod';
+import { BahtText } from 'react-thai/baht-text'; // renders on the server
+```
+
+All components are SSR-safe: nothing touches `window` during render. The address dataset is
+fetched with a dynamic `import()` on first focus, so it is split into its own chunk.

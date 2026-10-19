@@ -1,0 +1,26 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introduction" />
+
+# react-thai
+
+Accessible React components for Thai forms.
+
+- **ThaiDatePicker / ThaiDateRangePicker** – users see and type พ.ศ. (`17/10/2569`), your code gets a plain `Date`.
+- **ThaiAddressInput** – type a postcode, ตำบล/แขวง, อำเภอ/เขต or จังหวัด and fill all four fields from one suggestion. The 7,436-row dataset is lazy-loaded.
+- **ThaiIdInput, ThaiPhoneInput, BahtText** – masks, validation and baht text.
+
+```bash
+npm install react-thai
+```
+
+```tsx
+import { ThaiDatePicker } from 'react-thai/date-picker';
+import { ThaiAddressInput } from 'react-thai/address';
+import 'react-thai/styles.css'; // optional default theme
+
+<ThaiDatePicker label="วันเกิด" onChange={(date) => console.log(date)} />
+<ThaiAddressInput label="ที่อยู่" onChange={(address) => console.log(address)} />
+```
+
+Use the toolbar's **Theme** switch to preview dark mode. Every story runs axe (a11y addon) in CI.
