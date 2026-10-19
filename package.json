@@ -1,6 +1,6 @@
 {
   "name": "react-thai",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Accessible React components for Thai forms: Buddhist-calendar (พ.ศ.) date picker and Thai address autocomplete, plus Thai ID, phone and baht-text helpers.",
   "keywords": [
     "react",
