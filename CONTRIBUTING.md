@@ -51,4 +51,4 @@ Add a changeset to every user-facing PR:
 pnpm changeset
 ```
 
-On `main`, the Release workflow opens a "chore: release" PR that bumps versions and updates `CHANGELOG.md`. Merging it publishes to npm with provenance.
+On `main`, the Release workflow opens a "chore: release" PR that bumps the version and updates `CHANGELOG.md`. Merging it runs `scripts/release.sh`, which publishes to npm with provenance through [trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC, no `NPM_TOKEN`), then pushes the `vX.Y.Z` tag and creates the GitHub release. The trusted publisher is bound to `.github/workflows/release.yml`, so keep that file name.

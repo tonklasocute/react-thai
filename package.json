@@ -164,7 +164,7 @@
     "examples:verify": "bash scripts/verify-examples.sh",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "pnpm build && changeset publish"
+    "release": "bash scripts/release.sh"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
