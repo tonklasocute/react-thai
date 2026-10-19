@@ -1,0 +1,37 @@
+name: Bug report
+description: Something does not work as documented
+labels: [bug]
+body:
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - ThaiDatePicker / ThaiDateRangePicker / useThaiCalendar
+        - ThaiAddressInput / useThaiAddress / address data
+        - ThaiIdInput
+        - ThaiPhoneInput
+        - BahtText / validators / zod
+        - Styles / theming
+        - Build / packaging / types
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Steps to reproduce, expected and actual behaviour. A StackBlitz/CodeSandbox link helps a lot.
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      placeholder: react-thai 0.1.0, react 19.2, next 16.4, Chrome 140
+    validations:
+      required: true
+  - type: input
+    id: timezone
+    attributes:
+      label: Time zone (for date issues)
+      placeholder: Asia/Bangkok
