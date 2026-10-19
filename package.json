@@ -36,6 +36,31 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "date-picker": [
+        "./dist/date-picker.d.ts"
+      ],
+      "address": [
+        "./dist/address.d.ts"
+      ],
+      "thai-id": [
+        "./dist/thai-id.d.ts"
+      ],
+      "phone": [
+        "./dist/phone.d.ts"
+      ],
+      "baht-text": [
+        "./dist/baht-text.d.ts"
+      ],
+      "validators": [
+        "./dist/validators.d.ts"
+      ],
+      "zod": [
+        "./dist/zod.d.ts"
+      ]
+    }
+  },
   "exports": {
     ".": {
       "import": {
@@ -130,7 +155,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "size": "size-limit",
-    "check:exports": "publint && attw --pack . --profile node16 --exclude-entrypoints styles.css",
+    "check:exports": "publint && attw --pack . --exclude-entrypoints styles.css",
     "data:build": "tsx scripts/build-address-data.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o storybook-static",
