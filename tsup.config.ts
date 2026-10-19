@@ -24,11 +24,14 @@ const shared: Options = {
   dts: true,
   sourcemap: false,
   target: 'es2020',
-  treeshake: true,
   splitting: true,
   minify: false,
   external: ['react', 'react-dom', 'react/jsx-runtime', 'zod'],
   esbuildPlugins: [],
+  // Keep Thai text as UTF-8 instead of \uXXXX escapes (smaller, readable output).
+  esbuildOptions(options) {
+    options.charset = 'utf8';
+  },
 };
 
 export default defineConfig([
