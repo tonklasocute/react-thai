@@ -1,6 +1,11 @@
 body {
   font-family:
-    'Sarabun', 'Noto Sans Thai', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    'Sarabun',
+    'Noto Sans Thai',
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
 }
 .sb-surface {
   padding: 1rem;

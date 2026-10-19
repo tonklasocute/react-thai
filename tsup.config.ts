@@ -27,7 +27,7 @@ const shared: Options = {
   treeshake: true,
   splitting: true,
   minify: false,
-  external: ['react', 'react-dom', 'react/jsx-runtime', 'zod', '@floating-ui/react-dom'],
+  external: ['react', 'react-dom', 'react/jsx-runtime', 'zod'],
   esbuildPlugins: [],
 };
 
@@ -44,23 +44,21 @@ export default defineConfig([
     },
   },
   // Interactive components: every output file starts with "use client".
-  ...(['esm', 'cjs'] as const).map(
-    (format): Options => ({
-      ...shared,
-      format: [format],
-      entry: {
-        index: 'src/index.ts',
-        'date-picker': 'src/date-picker/index.ts',
-        address: 'src/address/index.ts',
-        'thai-id': 'src/thai-id/index.ts',
-        phone: 'src/phone/index.ts',
-      },
-      banner: { js: '"use client";' },
-      esbuildPlugins: [externalAddressData(format)],
-      async onSuccess() {
-        await mkdir('dist', { recursive: true });
-        await copyFile('src/styles/styles.css', 'dist/styles.css');
-      },
-    }),
-  ),
+  ...(['esm', 'cjs'] as const).map((format): Options => ({
+    ...shared,
+    format: [format],
+    entry: {
+      index: 'src/index.ts',
+      'date-picker': 'src/date-picker/index.ts',
+      address: 'src/address/index.ts',
+      'thai-id': 'src/thai-id/index.ts',
+      phone: 'src/phone/index.ts',
+    },
+    banner: { js: '"use client";' },
+    esbuildPlugins: [externalAddressData(format)],
+    async onSuccess() {
+      await mkdir('dist', { recursive: true });
+      await copyFile('src/styles/styles.css', 'dist/styles.css');
+    },
+  })),
 ]);

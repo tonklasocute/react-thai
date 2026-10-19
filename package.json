@@ -150,9 +150,7 @@
       "optional": true
     }
   },
-  "dependencies": {
-    "@floating-ui/react-dom": "^2.1.9"
-  },
+  "packageManager": "pnpm@12.11.2",
   "engines": {
     "node": ">=18"
   },
@@ -209,6 +207,5 @@
     "vitest": "^3.2.7",
     "wait-on": "^8.0.5",
     "zod": "^4.6.7"
-  },
-  "packageManager": "pnpm@12.11.2"
+  }
 }

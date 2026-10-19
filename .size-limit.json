@@ -1,6 +1,6 @@
 [
   {
-    "name": "ThaiDatePicker (react-thai/date-picker, incl. @floating-ui)",
+    "name": "ThaiDatePicker",
     "path": "dist/date-picker.js",
     "import": "{ ThaiDatePicker }",
     "limit": "12 kB"

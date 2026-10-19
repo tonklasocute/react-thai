@@ -11,7 +11,14 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/**/*.stories.tsx', 'src/**/*.test.{ts,tsx}', 'src/stories/**', 'src/address/data/**', 'src/**/index.ts', 'src/**/types.ts'],
+      exclude: [
+        'src/**/*.stories.tsx',
+        'src/**/*.test.{ts,tsx}',
+        'src/stories/**',
+        'src/address/data/**',
+        'src/**/index.ts',
+        'src/**/types.ts',
+      ],
       reporter: ['text', 'text-summary', 'json-summary', 'html'],
       thresholds: { statements: 85, branches: 85, functions: 85, lines: 85 },
     },
