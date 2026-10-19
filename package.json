@@ -30,7 +30,8 @@
     "*.css"
   ],
   "files": [
-    "dist"
+    "dist",
+    "THIRD_PARTY_NOTICES.md"
   ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
