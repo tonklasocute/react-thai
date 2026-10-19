@@ -52,7 +52,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['**/*.test.{ts,tsx}', '**/*.stories.tsx'],
+    files: ['**/*.test.{ts,tsx}', '**/*.stories.tsx', 'scripts/**'],
     rules: { '@typescript-eslint/no-non-null-assertion': 'off' },
   },
   prettier,
